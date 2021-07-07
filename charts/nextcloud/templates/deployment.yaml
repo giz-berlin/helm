@@ -68,7 +68,7 @@ spec:
         - name: MYSQL_HOST
           value: {{ template "nextcloud.mariadb.fullname" . }}
         - name: MYSQL_DATABASE
-          value: {{ .Values.mariadb.db.name | quote }}
+          value: {{ .Values.mariadb.auth.database | quote }}
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
@@ -159,15 +159,15 @@ spec:
           value: {{ template "nextcloud.redis.fullname" . }}-master
         - name: REDIS_HOST_PORT
           value: {{ .Values.redis.redisPort | quote }}
-        {{- if and .Values.redis.existingSecret .Values.redis.existingSecretPasswordKey }}
+        {{- if and .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey }}
         - name: REDIS_HOST_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.redis.existingSecret }}
-              key: {{ .Values.redis.existingSecretPasswordKey }}
+              name: {{ .Values.redis.auth.existingSecret }}
+              key: {{ .Values.redis.auth.existingSecretPasswordKey }}
         {{- else }}
         - name: REDIS_HOST_PASSWORD
-          value: {{ .Values.redis.password }}
+          value: {{ .Values.redis.auth.password }}
         {{- end }}
         {{- end }}
         {{- if .Values.nextcloud.extraEnv }}
